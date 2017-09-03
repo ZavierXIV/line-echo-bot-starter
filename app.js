@@ -16,15 +16,26 @@ app.listen(PORT, function () {
 
 // handler receiving messages
 app.post('/', function (req, res) {
+    // console.log(req.body);
+    console.log(JSON.stringify(req.body, null, 3));
+
+    let replyToken = req.body.events[0].replyToken;
+    let text = req.body.events[0].message.text;
+    if(text)
+    {
+        sendMessage(replyToken, text);
+    }
+
+    res.send(); // 有回應 line verify 才會驗證成功
 })
 
 // generic function sending messages
 function sendMessage(replyToken, text) {
     let body = {
-        replyToken,
-        messages: [{
+        replyToken, // 等同 replyToken : replyToken
+        messages: [{ // 最多五段  , 每段最多160 字
             type: 'text',
-            text,
+            text, // 欄位跟值相同時 可以縮寫  text: text
         }],
     };
 
